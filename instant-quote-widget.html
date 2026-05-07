@@ -1,0 +1,772 @@
+<!-- 
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  SILVERFISH TEES – INSTANT QUOTE WIDGET                     ║
+  ║  Paste this entire block into a DecoNetwork Custom HTML     ║
+  ║  widget on the Request a Quote page.                        ║
+  ║                                                             ║
+  ║  This will:                                                 ║
+  ║  1. Hide the native DecoNetwork quote form                  ║
+  ║  2. Show only the Instant Quote calculator                  ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+
+<!-- ── STEP 1: Hide the native quote form & fix header ── -->
+<style>
+  /* Hide the native DecoNetwork "Request A Quote" form widget */
+  .dn-widget-page_content_request_quote {
+    display: none !important;
+  }
+  /* Kill the fixed/sticky header — let it scroll away */
+  body.dn-fixed-header .dn-large-header-fixed-container,
+  body.dn-fixed-header .dn-small-header-fixed-container {
+    position: relative !important;
+  }
+</style>
+
+<!-- ── STEP 2: Instant Quote Calculator ── -->
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #00838f;
+  --teal-dark: #006064;
+  --teal-light: #b2ebf2;
+  --teal-50: #e0f7fa;
+  --orange: #ff6d00;
+  --orange-light: #ff9e40;
+  --white: #ffffff;
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #868e96;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --amber: #f59e0b;
+  --amber-dark: #d97706;
+  --amber-light: #fef3c7;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+.iq-wrap * { margin: 0; padding: 0; box-sizing: border-box; }
+.iq-wrap { font-family: 'Open Sans', sans-serif; color: var(--gray-800); line-height: 1.5; max-width: 720px; margin: 0 auto; padding: 24px 16px 40px; }
+
+/* ── HEADER ── */
+.iq-header { text-align: center; margin-bottom: 28px; }
+.iq-header h1 {
+  font-family: 'Oswald', sans-serif; font-size: 36px; font-weight: 700;
+  color: var(--teal-dark); letter-spacing: .5px; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.iq-header .iq-bolt {
+  display: inline-block; font-size: 32px; color: var(--teal);
+  filter: drop-shadow(0 1px 3px rgba(0,131,143,.4));
+}
+.iq-header .iq-tagline { font-size: 14px; color: var(--gray-600); margin-top: 6px; }
+.iq-header .iq-tagline a { color: var(--teal); font-weight: 600; text-decoration: none; }
+
+/* ── CARD ── */
+.iq-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md); padding: 28px 28px 24px; margin-bottom: 20px;
+}
+.iq-field { margin-bottom: 22px; }
+.iq-field:last-child { margin-bottom: 0; }
+.iq-label {
+  display: block; font-weight: 700; font-size: 13px;
+  text-transform: uppercase; letter-spacing: .6px;
+  color: var(--teal-dark); margin-bottom: 8px; font-family: 'Oswald', sans-serif;
+}
+
+/* ── SELECT ── */
+.iq-select {
+  width: 100%; padding: 12px 14px; font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+  border: 2px solid var(--gray-300); border-radius: var(--radius);
+  background: var(--white); color: var(--gray-800); appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23868e96' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  cursor: pointer; transition: border-color .2s;
+}
+.iq-select:focus { outline: none; border-color: var(--teal); }
+
+/* ── CHECKBOXES ── */
+.iq-checks { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.iq-check { position: relative; }
+.iq-check input { position: absolute; opacity: 0; pointer-events: none; }
+.iq-check label {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 16px; border: 2px solid var(--gray-300); border-radius: 8px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all .15s; user-select: none; background: var(--white);
+}
+.iq-check label:hover { border-color: var(--teal-light); background: var(--teal-50); }
+.iq-check input:checked + label {
+  border-color: var(--teal); background: var(--teal-50);
+  color: var(--teal-dark); font-weight: 600;
+}
+.iq-check .iq-checkmark {
+  width: 18px; height: 18px; border: 2px solid var(--gray-400);
+  border-radius: 4px; display: flex; align-items: center;
+  justify-content: center; transition: all .15s; flex-shrink: 0;
+}
+.iq-check input:checked + label .iq-checkmark { background: var(--teal); border-color: var(--teal); }
+.iq-check input:checked + label .iq-checkmark::after {
+  content: ''; width: 5px; height: 9px;
+  border: solid var(--white); border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+.iq-loc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.iq-loc-header .iq-label { margin-bottom: 0; }
+.iq-clear-link {
+  font-size: 12px; color: var(--gray-500); cursor: pointer;
+  text-decoration: none; border-bottom: 1px dashed var(--gray-400);
+  transition: color .15s; display: none;
+}
+.iq-clear-link.visible { display: inline; }
+.iq-clear-link:hover { color: var(--teal); border-color: var(--teal); }
+.iq-sleeve-sub { margin-top: 8px; display: none; gap: 8px; justify-content: center; }
+.iq-sleeve-sub.visible { display: flex; }
+.iq-sleeve-sub label { font-size: 13px; padding: 6px 12px; }
+
+/* ══════════════════════════════════════
+   METHOD TOGGLE
+   ══════════════════════════════════════ */
+.iq-method-toggle { display: flex; gap: 12px; }
+.iq-method-btn {
+  flex: 1; padding: 16px 16px; font-size: 15px; font-weight: 600;
+  text-align: center; cursor: pointer;
+  border: 2px solid var(--gray-300); border-radius: var(--radius);
+  background: var(--white); color: var(--gray-600);
+  font-family: 'Open Sans', sans-serif;
+  transition: all .25s; position: relative; overflow: hidden;
+}
+.iq-method-btn.active { border-color: var(--teal); color: var(--teal-dark); font-weight: 700; }
+.iq-method-btn.recommended { border-width: 3px; border-color: var(--teal); }
+.iq-method-btn:not(.active):hover { background: var(--gray-100); }
+.iq-method-btn.disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+.iq-method-inner { display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; z-index: 2; }
+.iq-method-label { position: relative; z-index: 2; }
+.iq-rec-badge {
+  display: none; font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .8px;
+  background: var(--teal); color: var(--white);
+  padding: 2px 7px; border-radius: 10px;
+  position: absolute; top: -8px; right: -8px; z-index: 3;
+}
+.iq-method-btn.recommended .iq-rec-badge { display: block; }
+
+/* ── Full-Color Print: rainbow sweep bg ── */
+#iqBtnDtf::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, #ff6d0022, #ff980022, #ffc10722, #4caf5022, #2196f322, #9c27b022, #e91e6322, #ff6d0022);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity .3s;
+  z-index: 0;
+}
+#iqBtnDtf:hover::before,
+#iqBtnDtf.active::before {
+  opacity: 1;
+  animation: iq-rainbow-sweep 3s linear infinite;
+}
+#iqBtnDtf.active {
+  background: var(--white);
+  border-image: linear-gradient(90deg, #ff6d00, #ffc107, #4caf50, #2196f3, #9c27b0, #ff6d00) 1;
+  border-image-slice: 1;
+  border-width: 3px;
+  border-style: solid;
+}
+@keyframes iq-rainbow-sweep {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.iq-fc-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: conic-gradient(#ff6d00, #ff9800, #ffc107, #8bc34a, #4caf50, #00bcd4, #2196f3, #673ab7, #9c27b0, #e91e63, #ff6d00);
+  flex-shrink: 0; z-index: 2;
+  animation: iq-spin-slow 6s linear infinite;
+  transition: box-shadow .3s, transform .3s;
+}
+#iqBtnDtf:hover .iq-fc-icon,
+#iqBtnDtf.active .iq-fc-icon {
+  animation: iq-spin-fast 1.5s linear infinite;
+  box-shadow: 0 0 12px rgba(255,109,0,.5), 0 0 24px rgba(33,150,243,.3), 0 0 36px rgba(156,39,176,.2);
+  transform: scale(1.15);
+}
+@keyframes iq-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes iq-spin-fast { from { transform: scale(1.15) rotate(0deg); } to { transform: scale(1.15) rotate(360deg); } }
+
+/* ── Embroidery: stitch pattern bg ── */
+#iqBtnEmb::before {
+  content: '';
+  position: absolute; top: 0; left: -100%; right: 0; bottom: 0;
+  width: 300%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 4px,
+    rgba(0,131,143,.08) 4px, rgba(0,131,143,.08) 8px,
+    transparent 8px, transparent 12px
+  );
+  opacity: 0;
+  transition: opacity .3s;
+  z-index: 0;
+}
+#iqBtnEmb:hover::before,
+#iqBtnEmb.active::before {
+  opacity: 1;
+  animation: iq-stitch-scroll 2s linear infinite;
+}
+#iqBtnEmb.active {
+  background: var(--teal-50);
+}
+@keyframes iq-stitch-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(12px); }
+}
+.iq-emb-icon {
+  width: 26px; height: 26px; flex-shrink: 0; z-index: 2;
+  transition: transform .3s;
+}
+.iq-emb-icon svg { width: 100%; height: 100%; }
+#iqBtnEmb:hover .iq-emb-icon,
+#iqBtnEmb.active .iq-emb-icon {
+  animation: iq-needle .8s ease-in-out infinite;
+}
+@keyframes iq-needle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-3px) rotate(-8deg); }
+  75% { transform: translateY(2px) rotate(5deg); }
+}
+
+.iq-method-note {
+  font-size: 12px; color: var(--teal); margin-top: 8px;
+  font-weight: 600; text-align: center; min-height: 18px;
+}
+.iq-method-note:empty { min-height: 0; margin-top: 0; }
+
+/* ── Info link ── */
+.iq-info-toggle { display: none; text-align: center; margin-top: 6px; }
+.iq-info-toggle.visible { display: block; }
+.iq-info-link {
+  font-size: 12px; color: var(--gray-500); cursor: pointer;
+  text-decoration: none; border-bottom: 1px dashed var(--gray-400); transition: color .15s;
+}
+.iq-info-link:hover { color: var(--teal); border-color: var(--teal); }
+
+/* ── Info Modal Overlay ── */
+.iq-info-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.5); z-index: 1000;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.iq-info-overlay.open { display: flex; }
+.iq-info-modal {
+  background: var(--white); border-radius: var(--radius-lg);
+  max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25); position: relative;
+}
+.iq-info-close {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none; font-size: 24px;
+  color: var(--gray-500); cursor: pointer; z-index: 2;
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; transition: all .15s;
+}
+.iq-info-close:hover { background: var(--gray-100); color: var(--gray-800); }
+.iq-info-modal-body {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.iq-info-side {
+  padding: 28px 24px;
+}
+.iq-info-side:first-child { border-right: 1px solid var(--gray-200); }
+.iq-info-side h3 {
+  font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700;
+  text-transform: uppercase; color: var(--gray-800); margin-bottom: 2px;
+}
+.iq-info-side .iq-info-sub {
+  font-size: 13px; color: var(--gray-500); font-weight: 600; margin-bottom: 14px;
+}
+.iq-info-img {
+  width: 100%; aspect-ratio: 4/3; border-radius: var(--radius);
+  object-fit: cover; margin-bottom: 16px;
+  background: var(--gray-100);
+}
+.iq-info-features {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+}
+.iq-info-feat {
+  text-align: center; padding: 8px 4px;
+}
+.iq-info-feat-icon {
+  font-size: 20px; margin-bottom: 2px;
+}
+.iq-info-feat strong {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--gray-800); text-transform: uppercase; letter-spacing: .3px;
+}
+.iq-info-feat span {
+  font-size: 10px; color: var(--gray-500);
+}
+.iq-info-desc {
+  font-size: 12px; color: var(--gray-600); line-height: 1.5;
+  border-top: 1px solid var(--gray-200); padding-top: 12px; margin-top: 4px;
+}
+
+/* ── QUANTITY ── */
+.iq-qty-area { background: var(--teal-50); border-radius: var(--radius); padding: 20px; }
+.iq-qty-display { text-align: center; margin-bottom: 14px; }
+.iq-qty-number { font-family: 'Oswald', sans-serif; font-size: 48px; font-weight: 700; color: var(--teal-dark); line-height: 1; }
+.iq-qty-unit { font-size: 14px; color: var(--gray-600); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+.iq-slider {
+  width: 100%; -webkit-appearance: none; appearance: none;
+  height: 8px; border-radius: 4px; background: var(--gray-300); outline: none; cursor: pointer;
+}
+.iq-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal); border: 3px solid var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2); cursor: grab;
+}
+.iq-slider::-moz-range-thumb {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal); border: 3px solid var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2); cursor: grab;
+}
+.iq-qty-input-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; }
+.iq-qty-input-row span { font-size: 13px; color: var(--gray-600); }
+.iq-qty-input {
+  width: 80px; text-align: center; padding: 6px;
+  border: 2px solid var(--gray-300); border-radius: 6px;
+  font-size: 15px; font-family: 'Open Sans', sans-serif; font-weight: 600;
+}
+.iq-qty-input:focus { outline: none; border-color: var(--teal); }
+
+/* ── RESULT ── */
+.iq-result {
+  border-radius: var(--radius-lg); padding: 28px;
+  color: var(--white); text-align: center;
+  box-shadow: var(--shadow-lg); display: none;
+}
+.iq-result.visible { display: block; }
+.iq-result--decorated { background: linear-gradient(135deg, var(--teal-dark), var(--teal)); }
+.iq-result--blank { background: linear-gradient(135deg, var(--amber-dark), var(--amber)); }
+.iq-result-label {
+  font-family: 'Oswald', sans-serif; font-size: 14px;
+  text-transform: uppercase; letter-spacing: 1.5px; opacity: .9; margin-bottom: 4px;
+}
+.iq-result-price { font-family: 'Oswald', sans-serif; font-size: 56px; font-weight: 700; line-height: 1.1; }
+.iq-result-per { font-size: 15px; opacity: .85; margin-top: 2px; }
+.iq-result-sublabel { font-size: 13px; opacity: .9; margin-top: 6px; font-weight: 600; }
+.iq-result-total {
+  font-size: 18px; font-weight: 600; margin-top: 10px;
+  padding-top: 12px; border-top: 1px solid rgba(255,255,255,.25);
+}
+.iq-result-disclaimer { font-size: 12px; opacity: .7; margin-top: 12px; line-height: 1.4; }
+.iq-result-fees { font-size: 13px; opacity: .8; margin-top: 8px; }
+
+/* ── DIGI NOTE ── */
+.iq-digi-note {
+  display: none; background: #fff3e0; border: 2px solid var(--orange);
+  border-radius: var(--radius); padding: 14px 18px;
+  margin-top: -8px; margin-bottom: 20px;
+  font-size: 14px; color: var(--gray-800); text-align: center;
+}
+.iq-digi-note.visible { display: block; }
+.iq-digi-note strong { color: var(--orange); }
+.iq-digi-waived { color: var(--teal); font-weight: 700; }
+
+/* ── PRICE BREAKS ── */
+.iq-breaks { margin-top: 20px; display: none; }
+.iq-breaks.visible { display: block; }
+.iq-breaks-title {
+  font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 600;
+  color: var(--teal-dark); text-transform: uppercase;
+  letter-spacing: .5px; margin-bottom: 10px; text-align: center;
+}
+.iq-breaks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+.iq-break-cell {
+  text-align: center; padding: 10px 6px; background: var(--gray-50);
+  border-radius: 8px; border: 2px solid transparent; transition: all .15s; cursor: pointer;
+}
+.iq-break-cell.active { border-color: var(--teal); background: var(--teal-50); }
+.iq-break-cell:hover:not(.active) { background: var(--gray-100); }
+.iq-break-qty { font-size: 12px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: .5px; }
+.iq-break-price { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; color: var(--teal-dark); margin-top: 2px; }
+.iq-break-save { font-size: 11px; color: var(--orange); font-weight: 600; margin-top: 2px; }
+
+/* ── ACTIONS ── */
+.iq-actions { margin-top: 20px; display: none; text-align: center; }
+.iq-actions.visible { display: block; }
+.iq-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 32px; border-radius: var(--radius);
+  font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .8px; cursor: pointer;
+  border: none; text-decoration: none; transition: all .15s;
+}
+.iq-btn-primary { background: var(--orange); color: var(--white); }
+.iq-btn-primary:hover {
+  background: var(--orange-light); transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255,109,0,.3);
+}
+
+/* ── BOTTOM CTA ── */
+.iq-bottom-cta {
+  margin-top: 24px; display: none;
+  background: var(--teal-50); border: 2px solid var(--teal);
+  border-radius: var(--radius-lg); padding: 24px 28px; text-align: center;
+}
+.iq-bottom-cta.visible { display: block; }
+.iq-bottom-cta h3 {
+  font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px; color: var(--teal-dark); margin-bottom: 8px;
+}
+.iq-bottom-cta p { font-size: 15px; color: var(--gray-700); margin-bottom: 14px; line-height: 1.6; }
+.iq-bottom-cta a {
+  display: inline-block; padding: 12px 28px;
+  background: var(--orange); color: var(--white);
+  border-radius: var(--radius); font-family: 'Oswald', sans-serif;
+  font-size: 15px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .8px; text-decoration: none; transition: all .15s;
+}
+.iq-bottom-cta a:hover {
+  background: var(--orange-light); transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255,109,0,.3);
+}
+
+/* ── OTHER CATEGORY ── */
+.iq-other-msg { display: none; text-align: center; padding: 32px 24px; }
+.iq-other-msg.visible { display: block; }
+.iq-other-msg h3 {
+  font-family: 'Oswald', sans-serif; font-size: 20px;
+  color: var(--teal-dark); text-transform: uppercase; margin-bottom: 8px;
+}
+.iq-other-msg p { font-size: 15px; color: var(--gray-700); margin-bottom: 16px; line-height: 1.6; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .iq-card { padding: 20px 18px; }
+  .iq-header h1 { font-size: 28px; }
+  .iq-result-price { font-size: 44px; }
+  .iq-breaks-grid { grid-template-columns: repeat(3, 1fr); }
+  .iq-method-toggle { gap: 8px; }
+  .iq-info-modal-body { grid-template-columns: 1fr; }
+  .iq-info-side:first-child { border-right: none; border-bottom: 1px solid var(--gray-200); }
+}
+</style>
+
+<div class="iq-wrap" id="iqApp">
+
+  <div class="iq-header">
+    <h1><span class="iq-bolt">&#9889;</span> Instant Quote</h1>
+    <p class="iq-tagline">Standard pricing for custom apparel. Not sure what you need? <a href="/request_quote">Request a custom quote</a>.</p>
+  </div>
+
+  <div class="iq-card">
+    <div class="iq-field">
+      <label class="iq-label">Product Type</label>
+      <select class="iq-select" id="iqCategory"><option value="">Choose a product&hellip;</option></select>
+    </div>
+  </div>
+
+  <div class="iq-card iq-other-msg" id="iqOtherMsg">
+    <h3>Looking for Something Else?</h3>
+    <p>Need other promo products, specialty prints, or individual personalization? Submit a custom request and we&rsquo;ll get you accurate pricing&mdash;and a few solid options&mdash;fast.</p>
+    <a class="iq-btn iq-btn-primary" href="/request_quote">Submit a Custom Request &#8594;</a>
+  </div>
+
+  <div class="iq-card" id="iqLocCard" style="display:none">
+    <div class="iq-field">
+      <div class="iq-loc-header">
+        <label class="iq-label" id="iqLocLabel">Print Locations</label>
+        <span class="iq-clear-link" id="iqClearLocs">Clear all</span>
+      </div>
+      <div class="iq-checks" id="iqLocations"></div>
+      <div class="iq-sleeve-sub" id="iqSleeveSub">
+        <div class="iq-check"><input type="radio" name="sleeveSide" id="sleeveLeft" value="left" checked><label for="sleeveLeft"><span class="iq-checkmark"></span>Left</label></div>
+        <div class="iq-check"><input type="radio" name="sleeveSide" id="sleeveRight" value="right"><label for="sleeveRight"><span class="iq-checkmark"></span>Right</label></div>
+        <div class="iq-check"><input type="radio" name="sleeveSide" id="sleeveBoth" value="both"><label for="sleeveBoth"><span class="iq-checkmark"></span>Both</label></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="iq-card" id="iqMethodCard" style="display:none">
+    <label class="iq-label">Decoration Method</label>
+    <div class="iq-method-toggle">
+      <button class="iq-method-btn" data-method="dtf" id="iqBtnDtf">
+        <span class="iq-rec-badge">&#9733; Best</span>
+        <span class="iq-method-inner">
+          <span class="iq-fc-icon"></span>
+          <span class="iq-method-label">Full-Color Print</span>
+        </span>
+      </button>
+      <button class="iq-method-btn" data-method="embroidery" id="iqBtnEmb">
+        <span class="iq-rec-badge">&#9733; Best</span>
+        <span class="iq-method-inner">
+          <span class="iq-emb-icon"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="10" width="14" height="14" rx="2" fill="none" stroke="#00838f" stroke-width="1.5"/>
+            <line x1="6" y1="13" x2="16" y2="13" stroke="#ff6d00" stroke-width="1.2"/>
+            <line x1="6" y1="15.5" x2="16" y2="15.5" stroke="#ff9800" stroke-width="1.2"/>
+            <line x1="6" y1="18" x2="16" y2="18" stroke="#ff6d00" stroke-width="1.2"/>
+            <line x1="6" y1="20.5" x2="16" y2="20.5" stroke="#ff9800" stroke-width="1.2"/>
+            <line x1="18" y1="17" x2="29" y2="6" stroke="#00838f" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="29.5" cy="5.5" r="1.2" stroke="#00838f" stroke-width="1" fill="none"/>
+            <path d="M18 17 C20 14, 22 16, 24 12 C25 10, 27 8, 28.5 6.8" stroke="#ff6d00" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+          </svg></span>
+          <span class="iq-method-label">Embroidery</span>
+        </span>
+      </button>
+    </div>
+    <div class="iq-method-note" id="iqMethodNote"></div>
+    <div class="iq-info-toggle" id="iqInfoToggle">
+      <span class="iq-info-link" id="iqInfoLink">What&rsquo;s the difference?</span>
+    </div>
+  </div>
+
+  <!-- INFO MODAL -->
+  <div class="iq-info-overlay" id="iqInfoOverlay">
+    <div class="iq-info-modal">
+      <button class="iq-info-close" id="iqInfoClose">&times;</button>
+      <div class="iq-info-modal-body">
+        <div class="iq-info-side">
+          <h3>Full-Color Print</h3>
+          <div class="iq-info-sub">Vibrant. Durable. Detailed.</div>
+          <img class="iq-info-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%23212529'/%3E%3Crect x='120' y='60' width='160' height='100' rx='8' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ff6d00'/%3E%3Cstop offset='33%25' stop-color='%23ffc107'/%3E%3Cstop offset='66%25' stop-color='%234caf50'/%3E%3Cstop offset='100%25' stop-color='%232196f3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='200' y='120' text-anchor='middle' font-size='22' fill='white' font-weight='bold' font-family='sans-serif'%3ELOGO%3C/text%3E%3Ctext x='200' y='220' text-anchor='middle' font-size='12' fill='%239e9e9e' font-family='sans-serif'%3EReplace with your hosted image%3C/text%3E%3C/svg%3E" alt="Full-color print example">
+          <div class="iq-info-features">
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#127912;</div><strong>Full Color</strong><span>Unlimited colors &amp; gradients</span></div>
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129526;</div><strong>Soft Feel</strong><span>Lightweight &amp; comfortable</span></div>
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128737;</div><strong>Durable</strong><span>Lasts the life of the garment</span></div>
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#10024;</div><strong>Versatile</strong><span>Works on many fabric types</span></div>
+          </div>
+          <div class="iq-info-desc">Full-color printing delivers bright, detailed designs with a smooth finish that moves with the fabric. Best for photos, gradients, fine lines, and complex artwork.</div>
+        </div>
+        <div class="iq-info-side">
+          <h3>Embroidery</h3>
+          <div class="iq-info-sub">Classic. Professional. Built to Last.</div>
+          <img class="iq-info-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%233d4a3e'/%3E%3Crect x='110' y='70' width='180' height='90' rx='8' fill='none' stroke='%23ccc' stroke-width='2'/%3E%3Ctext x='200' y='105' text-anchor='middle' font-size='18' fill='%23e0e0e0' font-weight='bold' font-family='sans-serif'%3ENORTH RIDGE%3C/text%3E%3Ctext x='200' y='125' text-anchor='middle' font-size='10' fill='%23bbb' font-family='sans-serif'%3EOUTFITTERS%3C/text%3E%3Ctext x='200' y='220' text-anchor='middle' font-size='12' fill='%239e9e9e' font-family='sans-serif'%3EReplace with your hosted image%3C/text%3E%3C/svg%3E" alt="Embroidery example">
+          <div class="iq-info-features">
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129525;</div><strong>Premium Look</strong><span>Professional &amp; elevated</span></div>
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128170;</div><strong>Built to Last</strong><span>Highly durable &amp; rugged</span></div>
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129527;</div><strong>Texture &amp; Depth</strong><span>Adds dimension to your brand</span></div>
+            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128085;</div><strong>Timeless Style</strong><span>Classic look, never dated</span></div>
+          </div>
+          <div class="iq-info-desc">Embroidery uses high-quality stitching for a raised, textured finish that stands out. Best for logos, text, and simpler designs. Ideal for high-pile fabrics like fleece. Not suited for fine detail, gradients, or photos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="iq-card" id="iqQtyCard" style="display:none">
+    <div class="iq-field">
+      <label class="iq-label">Quantity</label>
+      <div class="iq-qty-area">
+        <div class="iq-qty-display">
+          <div class="iq-qty-number" id="iqQtyNumber">12</div>
+          <div class="iq-qty-unit">pieces</div>
+        </div>
+        <input type="range" class="iq-slider" id="iqSlider" min="1" max="500" value="12">
+        <div class="iq-qty-input-row">
+          <span>or type exact:</span>
+          <input type="number" class="iq-qty-input" id="iqQtyInput" value="12" min="1" max="10000">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="iq-digi-note" id="iqDigiNote"></div>
+
+  <div class="iq-result" id="iqResult">
+    <div class="iq-result-label" id="iqResultLabel">Estimated Price Per Piece</div>
+    <div class="iq-result-price" id="iqPriceEach">$0.00</div>
+    <div class="iq-result-per">per piece</div>
+    <div class="iq-result-sublabel" id="iqResultSub"></div>
+    <div class="iq-result-total" id="iqPriceTotal">Total: $0.00</div>
+    <div class="iq-result-fees" id="iqResultFees"></div>
+    <div class="iq-result-disclaimer">Plus applicable tax &amp; shipping.</div>
+  </div>
+
+  <div class="iq-breaks" id="iqBreaks">
+    <div class="iq-breaks-title">Volume Price Breaks</div>
+    <div class="iq-breaks-grid" id="iqBreaksGrid"></div>
+  </div>
+
+  <div class="iq-actions" id="iqActions">
+    <a class="iq-btn iq-btn-primary" id="iqBtnShop" href="#">Shop This Product &#8594;</a>
+  </div>
+
+  <div class="iq-bottom-cta" id="iqBottomCta">
+    <h3>Looking for Something Else?</h3>
+    <p>Need other promo products, specialty prints, or individual personalization? Submit a custom request and we&rsquo;ll get you accurate pricing&mdash;and a few solid options&mdash;fast.</p>
+    <a href="/request_quote">Submit a Custom Request &#8594;</a>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  var CATEGORIES = {
+    tshirts:       { name: 'T-Shirts',              blank: 3.00,  methods: ['dtf'],              recommended: null,         locGroup: 'apparel',  shopUrl: '/category/t-shirts' },
+    crewnecks:     { name: 'Crewneck Sweatshirts',   blank: 8.00,  methods: ['dtf','embroidery'], recommended: null,         locGroup: 'apparel',  shopUrl: '/category/sweatshirts' },
+    pulloverHoods: { name: 'Pullover Hoodies',       blank: 11.00, methods: ['dtf','embroidery'], recommended: null,         locGroup: 'apparel',  shopUrl: '/category/hoodies' },
+    zipHoods:      { name: 'Zip-Up Hoodies',         blank: 15.00, methods: ['dtf','embroidery'], recommended: null,         locGroup: 'apparel',  shopUrl: '/category/hoodies' },
+    polos:         { name: 'Polos',                  blank: 6.25,  methods: ['embroidery','dtf'], recommended: 'embroidery', locGroup: 'apparel',  shopUrl: '/category/polos' },
+    caps:          { name: 'Caps',                   blank: 4.00,  methods: ['embroidery','dtf'], recommended: 'embroidery', locGroup: 'caps',     shopUrl: '/category/hats' },
+    beanies:       { name: 'Beanies',                blank: 2.15,  methods: ['embroidery'],       recommended: null,         locGroup: 'beanies',  shopUrl: '/category/hats' },
+    jackets:       { name: 'Jackets',                blank: 14.00, methods: ['dtf','embroidery'], recommended: null,         locGroup: 'apparel',  shopUrl: '/category/jackets' },
+    pantsShorts:   { name: 'Pants & Shorts',         blank: 6.00,  methods: ['dtf','embroidery'], recommended: null,         locGroup: 'apparel',  shopUrl: '/category/pants' },
+    jerseys:       { name: 'Jerseys',                blank: 7.00,  methods: ['dtf'],              recommended: null,         locGroup: 'apparel',  shopUrl: '/category/jerseys' },
+    bags:          { name: 'Bags',                   blank: 1.75,  methods: ['dtf','embroidery'], recommended: 'dtf',        locGroup: 'surface',  shopUrl: '/category/bags' },
+    aprons:        { name: 'Aprons',                 blank: 6.00,  methods: ['dtf','embroidery'], recommended: null,         locGroup: 'surface',  shopUrl: '/category/aprons' },
+    towels:        { name: 'Towels',                 blank: 11.00, methods: ['embroidery','dtf'], recommended: 'embroidery', locGroup: 'surface',  shopUrl: '/category/towels' },
+    blankets:      { name: 'Blankets',               blank: 7.00,  methods: ['embroidery','dtf'], recommended: 'embroidery', locGroup: 'surface',  shopUrl: '/category/blankets' },
+    other:         { name: 'Other / Promotional',    blank: 0,     methods: [],                   recommended: null,         locGroup: null,       shopUrl: '/request_quote' },
+  };
+  var LOC_GROUPS = {
+    apparel: [
+      { id:'chest', label:'Small Front Logo', sqIn:16 },
+      { id:'fullFront', label:'Large Front Logo', sqIn:168 },
+      { id:'upperBack', label:'Upper Back Logo', sqIn:40 },
+      { id:'fullBack', label:'Large Back Logo', sqIn:168 },
+      { id:'sleeve', label:'Sleeve', sqIn:42 },
+    ],
+    caps: [{ id:'hatFront', label:'Front', sqIn:16 },{ id:'hatBack', label:'Back', sqIn:12 },{ id:'hatSide', label:'Side', sqIn:10 }],
+    beanies: [{ id:'beanFront', label:'Front', sqIn:12 }],
+    surface: [{ id:'primary', label:'Primary Surface', sqIn:60 }],
+  };
+  var MARKUP_TIERS = [{max:4.99,pct:2},{max:9.99,pct:1.5},{max:19.99,pct:1},{max:29.99,pct:.85},{max:39.99,pct:.75},{max:49.99,pct:.65},{max:Infinity,pct:.5}];
+  var PRINT_TIERS = [{max:20,price:5.75},{max:60,price:6},{max:100,price:6.75},{max:Infinity,price:7}];
+  var ADD_LOC_DISC = .15, EMB_LOC = 15, EMB_SETUP = 25, EMB_WAIVE = 24;
+  var VOL = [{min:2500,pct:.35},{min:1000,pct:.32},{min:500,pct:.29},{min:300,pct:.27},{min:200,pct:.25},{min:100,pct:.22},{min:50,pct:.18},{min:25,pct:.12},{min:10,pct:.06},{min:0,pct:0}];
+  var BREAKS = [1,10,25,50,100,200,300,500];
+
+  var $=function(s){return document.querySelector(s)}, $$=function(s){return Array.from(document.querySelectorAll(s))};
+  var elCat=$('#iqCategory'),elMC=$('#iqMethodCard'),elBD=$('#iqBtnDtf'),elBE=$('#iqBtnEmb'),
+      elMN=$('#iqMethodNote'),elIT=$('#iqInfoToggle'),elIL=$('#iqInfoLink'),elIO=$('#iqInfoOverlay'),elIC=$('#iqInfoClose'),
+      elLC=$('#iqLocCard'),elLL=$('#iqLocLabel'),elLO=$('#iqLocations'),elCL=$('#iqClearLocs'),elSS=$('#iqSleeveSub'),
+      elQC=$('#iqQtyCard'),elSL=$('#iqSlider'),elQN=$('#iqQtyNumber'),elQI=$('#iqQtyInput'),
+      elR=$('#iqResult'),elRL=$('#iqResultLabel'),elPE=$('#iqPriceEach'),elPT=$('#iqPriceTotal'),
+      elRS=$('#iqResultSub'),elRF=$('#iqResultFees'),elDN=$('#iqDigiNote'),
+      elBR=$('#iqBreaks'),elBG=$('#iqBreaksGrid'),elAC=$('#iqActions'),elBC=$('#iqBottomCta'),
+      elBS=$('#iqBtnShop'),elOM=$('#iqOtherMsg');
+  var curM='dtf';
+
+  Object.entries(CATEGORIES).forEach(function(e){var o=document.createElement('option');o.value=e[0];o.textContent=e[1].name;elCat.appendChild(o);});
+
+  [elBD,elBE].forEach(function(b){b.addEventListener('click',function(){if(b.classList.contains('disabled'))return;[elBD,elBE].forEach(function(x){x.classList.remove('active')});b.classList.add('active');curM=b.dataset.method;updateLL();updateDN();recalc();});});
+
+  elIL.addEventListener('click',function(){elIO.classList.add('open');});
+  elIC.addEventListener('click',function(){elIO.classList.remove('open');});
+  elIO.addEventListener('click',function(e){if(e.target===elIO)elIO.classList.remove('open');});
+
+  elCL.addEventListener('click',function(){$$('#iqLocations input[type="checkbox"]').forEach(function(c){c.checked=false});elSS.classList.remove('visible');elCL.classList.remove('visible');recalc();});
+
+  elCat.addEventListener('change',function(){
+    var k=elCat.value;if(!k){hideAll();return;}
+    var c=CATEGORIES[k];
+    if(k==='other'){hideAll();elOM.classList.add('visible');return;}
+    elOM.classList.remove('visible');
+    var hd=c.methods.indexOf('dtf')>=0,he=c.methods.indexOf('embroidery')>=0;
+    buildLocs(c.locGroup);elLC.style.display='';elMC.style.display='';
+    elBD.classList.toggle('disabled',!hd);elBE.classList.toggle('disabled',!he);
+    curM=c.methods[0];
+    [elBD,elBE].forEach(function(b){b.classList.remove('active','recommended')});
+    if(curM==='dtf')elBD.classList.add('active');else elBE.classList.add('active');
+    if(c.recommended==='embroidery')elBE.classList.add('recommended');
+    else if(c.recommended==='dtf')elBD.classList.add('recommended');
+    if(c.recommended){var rn=c.recommended==='embroidery'?'embroidery':'full-color print';elMN.textContent='Based on your selection, '+rn+' is the recommended decoration method';}
+    else if(c.methods.length===1){elMN.textContent='Only '+(c.methods[0]==='embroidery'?'embroidery':'full-color print')+' is available for this product';}
+    else elMN.textContent='';
+    elIT.classList.toggle('visible',hd&&he);
+    elQC.style.display='';updateLL();updateDN();recalc();
+  });
+
+  function hideAll(){elLC.style.display='none';elMC.style.display='none';elQC.style.display='none';elR.classList.remove('visible');elBR.classList.remove('visible');elAC.classList.remove('visible');elBC.classList.remove('visible');elDN.classList.remove('visible');elOM.classList.remove('visible');}
+
+  function buildLocs(gk){
+    var ls=LOC_GROUPS[gk]||LOC_GROUPS.surface;elLO.innerHTML='';elSS.classList.remove('visible');elCL.classList.remove('visible');
+    ls.forEach(function(l){
+      var d=document.createElement('div');d.className='iq-check';
+      d.innerHTML='<input type="checkbox" id="loc_'+l.id+'" data-sqin="'+l.sqIn+'" data-id="'+l.id+'"><label for="loc_'+l.id+'"><span class="iq-checkmark"></span>'+l.label+'</label>';
+      elLO.appendChild(d);
+      d.querySelector('input').addEventListener('change',function(e){if(l.id==='sleeve')elSS.classList.toggle('visible',e.target.checked);updateCL();recalc();});
+    });
+    $$('input[name="sleeveSide"]').forEach(function(r){r.addEventListener('change',recalc);});
+  }
+  function updateCL(){elCL.classList.toggle('visible',$$('#iqLocations input[type="checkbox"]:checked').length>0);}
+
+  elSL.addEventListener('input',function(){var v=parseInt(elSL.value);elQN.textContent=v;elQI.value=v;recalc();});
+  elQI.addEventListener('input',function(){var v=parseInt(elQI.value)||1;if(v<1)v=1;if(v>10000)v=10000;elQN.textContent=v;elSL.value=Math.min(v,500);recalc();});
+
+  function updateLL(){elLL.textContent=curM==='embroidery'?'Embroidery Locations':'Print Locations';}
+  function updateDN(){
+    var q=parseInt(elQI.value)||1,ls=getSL(),sh=curM==='embroidery'&&!!elCat.value&&elCat.value!=='other'&&ls.length>0;
+    elDN.classList.toggle('visible',sh);
+    if(sh&&q>=EMB_WAIVE)elDN.innerHTML='&#x1F9F5; <strong>$25 one-time digitizing &amp; setup fee</strong> &mdash; <span class="iq-digi-waived">WAIVED</span> on your order of '+q+'+ pieces!';
+    else if(sh)elDN.innerHTML='&#x1F9F5; <strong>$25 one-time digitizing &amp; setup fee</strong> applies for embroidery orders. <strong>Waived on orders of 24+ pieces.</strong>';
+  }
+
+  function gM(c){for(var i=0;i<MARKUP_TIERS.length;i++)if(c<=MARKUP_TIERS[i].max)return MARKUP_TIERS[i].pct;return .5;}
+  function gD(s){for(var i=0;i<PRINT_TIERS.length;i++)if(s<=PRINT_TIERS[i].max)return PRINT_TIERS[i].price;return 7;}
+  function gV(q){for(var i=0;i<VOL.length;i++)if(q>VOL[i].min)return VOL[i].pct;return 0;}
+
+  function calc(q,ck,m,sl){
+    var c=CATEGORIES[ck];if(!c||c.blank<=0)return null;
+    var base=c.blank+(c.blank*gM(c.blank)),vd=gV(q),bl=sl.length===0,lt=0;
+    if(!bl){if(m==='embroidery'){sl.forEach(function(l,i){var p=EMB_LOC;if(i>0)p*=(1-ADD_LOC_DISC);lt+=p;});}
+    else{sl.forEach(function(l,i){var p=gD(l.sqIn);if(i>0)p*=(1-ADD_LOC_DISC);lt+=p;});}}
+    var pp=(base+lt)*(1-vd),sf=(m==='embroidery'&&!bl&&q<EMB_WAIVE)?EMB_SETUP:0;
+    return{perPiece:pp,total:(pp*q)+sf,setupFee:sf,isBlankOnly:bl};
+  }
+
+  function getSL(){
+    var ch=$$('#iqLocations input[type="checkbox"]:checked'),ls=[];
+    ch.forEach(function(c){var id=c.dataset.id,sq=parseInt(c.dataset.sqin);
+      if(id==='sleeve'){var s=document.querySelector('input[name="sleeveSide"]:checked'),sv=s?s.value:'left';
+        if(sv==='both'){ls.push({id:'sL',sqIn:sq});ls.push({id:'sR',sqIn:sq});}else ls.push({id:id,sqIn:sq});
+      }else ls.push({id:id,sqIn:sq});});return ls;
+  }
+
+  function recalc(){
+    var ck=elCat.value;if(!ck||ck==='other')return;
+    var q=parseInt(elQI.value)||1,ls=getSL();updateDN();
+    var r=calc(q,ck,curM,ls);
+    if(!r){elR.classList.remove('visible');elBR.classList.remove('visible');elAC.classList.remove('visible');elBC.classList.remove('visible');return;}
+    elPE.textContent='$'+r.perPiece.toFixed(2);
+    elPT.textContent='Total: $'+r.total.toFixed(2);
+    elR.classList.remove('iq-result--decorated','iq-result--blank');
+    if(r.isBlankOnly){
+      elR.classList.add('iq-result--blank');
+      elRL.textContent='\u26A0 No Decoration Selected';
+      elRS.textContent='This is the blank item price \u2014 select a print or embroidery location above';
+    } else {
+      elR.classList.add('iq-result--decorated');
+      elRL.textContent='Estimated Price Per Piece';
+      elRS.textContent='';
+    }
+    if(r.setupFee>0)elRF.textContent='Includes $'+r.setupFee.toFixed(2)+' one-time digitizing fee in total';else elRF.textContent='';
+    elR.classList.add('visible');
+    buildBR(ck,curM,ls,q);elBR.classList.add('visible');
+    elBS.href=CATEGORIES[ck].shopUrl;elAC.classList.add('visible');elBC.classList.add('visible');
+  }
+
+  function buildBR(ck,m,l,cq){
+    elBG.innerHTML='';var br=calc(1,ck,m,l);if(!br)return;var bp=br.perPiece;
+    BREAKS.forEach(function(bq,idx){
+      var res=calc(bq,ck,m,l);if(!res)return;
+      var c=document.createElement('div');c.className='iq-break-cell';
+      if(cq>=bq&&(idx===BREAKS.length-1||cq<BREAKS[idx+1]))c.classList.add('active');
+      var sv=bp>0?Math.round((1-res.perPiece/bp)*100):0;
+      c.innerHTML='<div class="iq-break-qty">'+bq+'+ pcs</div><div class="iq-break-price">$'+res.perPiece.toFixed(2)+'</div>'+(sv>0?'<div class="iq-break-save">Save '+sv+'%</div>':'<div class="iq-break-save">&nbsp;</div>');
+      c.addEventListener('click',(function(q){return function(){elQI.value=q;elSL.value=Math.min(q,500);elQN.textContent=q;recalc();};})(bq));
+      elBG.appendChild(c);
+    });
+  }
+})();
+</script>
