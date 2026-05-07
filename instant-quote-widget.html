@@ -204,17 +204,11 @@
 @keyframes iq-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes iq-spin-fast { from { transform: scale(1.15) rotate(0deg); } to { transform: scale(1.15) rotate(360deg); } }
 
-/* ── Embroidery: stitch pattern bg ── */
+/* ── Embroidery: subtle shimmer sweep ── */
 #iqBtnEmb::before {
   content: '';
-  position: absolute; top: 0; left: -100%; right: 0; bottom: 0;
-  width: 300%;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0px, transparent 4px,
-    rgba(0,131,143,.08) 4px, rgba(0,131,143,.08) 8px,
-    transparent 8px, transparent 12px
-  );
+  position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,131,143,.07), transparent);
   opacity: 0;
   transition: opacity .3s;
   z-index: 0;
@@ -222,14 +216,14 @@
 #iqBtnEmb:hover::before,
 #iqBtnEmb.active::before {
   opacity: 1;
-  animation: iq-stitch-scroll 2s linear infinite;
+  animation: iq-shimmer 2.5s ease-in-out infinite;
 }
 #iqBtnEmb.active {
   background: var(--teal-50);
 }
-@keyframes iq-stitch-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(12px); }
+@keyframes iq-shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
 }
 .iq-emb-icon {
   width: 26px; height: 26px; flex-shrink: 0; z-index: 2;
@@ -238,12 +232,11 @@
 .iq-emb-icon svg { width: 100%; height: 100%; }
 #iqBtnEmb:hover .iq-emb-icon,
 #iqBtnEmb.active .iq-emb-icon {
-  animation: iq-needle .8s ease-in-out infinite;
+  animation: iq-emb-pulse 2s ease-in-out infinite;
 }
-@keyframes iq-needle {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-3px) rotate(-8deg); }
-  75% { transform: translateY(2px) rotate(5deg); }
+@keyframes iq-emb-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 .iq-method-note {
