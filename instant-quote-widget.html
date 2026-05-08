@@ -12,299 +12,26 @@
 
 <!-- ── STEP 1: Hide the native quote form & fix header ── -->
 <style>
-  /* Hide the native DecoNetwork "Request A Quote" form widget */
-  .dn-widget-page_content_request_quote {
-    display: none !important;
-  }
-  /* Kill the fixed/sticky header — let it scroll away */
-  body.dn-fixed-header .dn-large-header-fixed-container,
-  body.dn-fixed-header .dn-small-header-fixed-container {
-    position: relative !important;
-  }
-</style>
-
-<!-- ── STEP 2: Instant Quote Calculator ── -->
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --teal: #00838f;
-  --teal-dark: #006064;
-  --teal-light: #b2ebf2;
-  --teal-50: #e0f7fa;
-  --orange: #F7B500;
-  --orange-light: #F9C840;
-  --white: #ffffff;
-  --gray-50: #f8f9fa;
-  --gray-100: #f1f3f5;
-  --gray-200: #e9ecef;
-  --gray-300: #dee2e6;
-  --gray-400: #ced4da;
-  --gray-500: #adb5bd;
-  --gray-600: #868e96;
-  --gray-700: #495057;
-  --gray-800: #343a40;
-  --gray-900: #212529;
-  --amber: #F7B500;
-  --amber-dark: #C99A00;
-  --amber-light: #FFF8E1;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.1);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
-  --radius: 10px;
-  --radius-lg: 14px;
-}
-.iq-wrap * { margin: 0; padding: 0; box-sizing: border-box; }
-.iq-wrap { font-family: 'Open Sans', sans-serif; color: var(--gray-800); line-height: 1.5; max-width: 720px; margin: 0 auto; padding: 24px 16px 40px; }
-
-/* ── HEADER ── */
-.iq-header { text-align: center; margin-bottom: 28px; }
-.iq-header h1 {
-  font-family: 'Oswald', sans-serif; font-size: 36px; font-weight: 700;
-  color: var(--teal-dark); letter-spacing: .5px; text-transform: uppercase;
-  display: inline-flex; align-items: center; gap: 8px;
-}
-.iq-header .iq-bolt {
-  display: inline-block; font-size: 32px; color: var(--teal);
-  filter: drop-shadow(0 1px 3px rgba(0,131,143,.4));
-}
-.iq-header .iq-tagline { font-size: 14px; color: var(--gray-600); margin-top: 6px; }
-.iq-header .iq-tagline a { color: var(--teal); font-weight: 600; text-decoration: none; }
-
-/* ── CARD ── */
-.iq-card {
-  background: var(--white); border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md); padding: 28px 28px 24px; margin-bottom: 20px;
-}
-.iq-field { margin-bottom: 22px; }
-.iq-field:last-child { margin-bottom: 0; }
-.iq-label {
-  display: block; font-weight: 700; font-size: 13px;
-  text-transform: uppercase; letter-spacing: .6px;
-  color: var(--teal-dark); margin-bottom: 8px; font-family: 'Oswald', sans-serif;
-}
-
-/* ── SELECT ── */
-.iq-select {
-  width: 100%; padding: 12px 14px; font-size: 15px;
-  font-family: 'Open Sans', sans-serif;
-  border: 2px solid var(--gray-300); border-radius: var(--radius);
-  background: var(--white); color: var(--gray-800); appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23868e96' stroke-width='2' fill='none'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 14px center;
-  cursor: pointer; transition: border-color .2s;
-}
-.iq-select:focus { outline: none; border-color: var(--teal); }
-
-/* ── CHECKBOXES ── */
-.iq-checks { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-.iq-check { position: relative; }
-.iq-check input { position: absolute; opacity: 0; pointer-events: none; }
-.iq-check label {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 9px 16px; border: 2px solid var(--gray-300); border-radius: 8px;
-  font-size: 14px; font-weight: 500; cursor: pointer;
-  transition: all .15s; user-select: none; background: var(--white);
-}
-.iq-check label:hover { border-color: var(--teal-light); background: var(--teal-50); }
-.iq-check input:checked + label {
-  border-color: var(--teal); background: var(--teal-50);
-  color: var(--teal-dark); font-weight: 600;
-}
-.iq-check .iq-checkmark {
-  width: 18px; height: 18px; border: 2px solid var(--gray-400);
-  border-radius: 4px; display: flex; align-items: center;
-  justify-content: center; transition: all .15s; flex-shrink: 0;
-}
-.iq-check input:checked + label .iq-checkmark { background: var(--teal); border-color: var(--teal); }
-.iq-check input:checked + label .iq-checkmark::after {
-  content: ''; width: 5px; height: 9px;
-  border: solid var(--white); border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translate(-1px, -1px);
-}
-.iq-loc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.iq-loc-header .iq-label { margin-bottom: 0; }
-.iq-clear-link {
-  font-size: 12px; color: var(--gray-500); cursor: pointer;
-  text-decoration: none; border-bottom: 1px dashed var(--gray-400);
-  transition: color .15s; display: none;
-}
-.iq-clear-link.visible { display: inline; }
-.iq-clear-link:hover { color: var(--teal); border-color: var(--teal); }
-.iq-sleeve-sub { margin-top: 8px; display: none; gap: 8px; justify-content: center; }
-.iq-sleeve-sub.visible { display: flex; }
-.iq-sleeve-sub label { font-size: 13px; padding: 6px 12px; }
-
-/* ══════════════════════════════════════
-   METHOD TOGGLE
-   ══════════════════════════════════════ */
-.iq-method-toggle { display: flex; gap: 12px; }
-.iq-method-btn {
-  flex: 1; padding: 16px 16px; font-size: 15px; font-weight: 600;
-  text-align: center; cursor: pointer;
-  border: 2px solid var(--gray-300); border-radius: var(--radius);
-  background: var(--white); color: var(--gray-600);
-  font-family: 'Open Sans', sans-serif;
-  transition: all .25s; position: relative; overflow: hidden;
-}
-.iq-method-btn.active { border-color: var(--teal); color: var(--teal-dark); font-weight: 700; }
-.iq-method-btn.recommended { border-width: 3px; border-color: var(--teal); }
-.iq-method-btn:not(.active):hover { background: var(--gray-100); }
-.iq-method-btn.disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
-.iq-method-inner { display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; z-index: 2; }
-.iq-method-label { position: relative; z-index: 2; }
-.iq-rec-badge {
-  display: none; font-size: 9px; font-weight: 800;
-  text-transform: uppercase; letter-spacing: .6px;
-  background: var(--teal); color: var(--white);
-  padding: 3px 8px; border-radius: 4px;
-  position: absolute; top: 6px; right: 6px; z-index: 3;
-  box-shadow: 0 1px 4px rgba(0,0,0,.15);
-}
-.iq-method-btn.recommended .iq-rec-badge { display: block; }
-
-/* ── Full-Color Print: heat press reveal ── */
-#iqBtnDtf::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, 
-    rgba(255,109,0,.06) 0%, rgba(255,193,7,.06) 25%, 
-    rgba(76,175,80,.06) 50%, rgba(33,150,243,.06) 75%, 
-    rgba(156,39,176,.06) 100%);
-  opacity: 0; transition: opacity .3s; z-index: 0;
-}
-#iqBtnDtf:hover::before,
-#iqBtnDtf.active::before { opacity: 1; }
-/* press reveal band */
-#iqBtnDtf::after {
-  content: '';
-  position: absolute; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #ff6d00, #ffc107, #4caf50, #2196f3, #9c27b0);
-  top: -3px; opacity: 0; z-index: 1; transition: opacity .3s;
-}
-#iqBtnDtf:hover::after,
-#iqBtnDtf.active::after {
-  opacity: 1;
-  animation: iq-press 2s ease-in-out infinite;
-}
-#iqBtnDtf.active {
-  background: var(--white);
-  border-image: linear-gradient(90deg, #ff6d00, #ffc107, #4caf50, #2196f3, #9c27b0, #ff6d00) 1;
-  border-image-slice: 1; border-width: 3px; border-style: solid;
-}
-@keyframes iq-press {
-  0% { top: -3px; opacity: .3; }
-  40% { top: calc(100% - 3px); opacity: 1; }
-  60% { top: calc(100% - 3px); opacity: 1; }
-  100% { top: -3px; opacity: .3; }
-}
-/* Print icon: color circle that "stamps" */
-.iq-fc-icon {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: conic-gradient(#ff6d00, #ff9800, #ffc107, #8bc34a, #4caf50, #00bcd4, #2196f3, #673ab7, #9c27b0, #e91e63, #ff6d00);
-  flex-shrink: 0; z-index: 2; transition: all .3s;
-}
-#iqBtnDtf:hover .iq-fc-icon,
-#iqBtnDtf.active .iq-fc-icon {
-  animation: iq-stamp 2s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(247,181,0,.4);
-}
-@keyframes iq-stamp {
-  0%, 100% { transform: scale(1); }
-  35% { transform: scale(.85); }
-  45% { transform: scale(1.12); }
-  55% { transform: scale(1.05); }
-}
-
-/* ── Embroidery: stitch lines drawing in ── */
-#iqBtnEmb::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--teal-50); opacity: 0; transition: opacity .3s; z-index: 0;
-}
-#iqBtnEmb:hover::before,
-#iqBtnEmb.active::before { opacity: 1; }
-#iqBtnEmb.active { background: var(--teal-50); }
-.iq-emb-icon {
-  width: 28px; height: 28px; flex-shrink: 0; z-index: 2;
-}
-.iq-emb-icon svg { width: 100%; height: 100%; }
-/* Stitch lines draw in via stroke-dashoffset */
-.iq-emb-icon .iq-stitch {
-  stroke-dasharray: 20;
-  stroke-dashoffset: 20;
-  transition: stroke-dashoffset .3s;
-}
-#iqBtnEmb:hover .iq-stitch,
-#iqBtnEmb.active .iq-stitch {
-  animation: iq-sew 2.5s ease-in-out infinite;
-}
-.iq-emb-icon .iq-stitch:nth-child(2) { animation-delay: .15s; }
-.iq-emb-icon .iq-stitch:nth-child(3) { animation-delay: .3s; }
-.iq-emb-icon .iq-stitch:nth-child(4) { animation-delay: .45s; }
-.iq-emb-icon .iq-stitch:nth-child(5) { animation-delay: .6s; }
-.iq-emb-icon .iq-needle {
-  transition: transform .3s;
-}
-#iqBtnEmb:hover .iq-needle,
-#iqBtnEmb.active .iq-needle {
-  animation: iq-needlemove 2.5s ease-in-out infinite;
-}
-@keyframes iq-sew {
-  0% { stroke-dashoffset: 20; }
-  40% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 0; }
-}
-@keyframes iq-needlemove {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(2px, -3px); }
-  40% { transform: translate(4px, -1px); }
-  60% { transform: translate(2px, 1px); }
-  80% { transform: translate(0, -2px); }
-  100% { transform: translate(0, 0); }
-}
-
-.iq-method-note {
-  font-size: 15px; color: var(--teal); margin-top: 12px;
-  font-weight: 700; text-align: center; min-height: 20px;
-  font-family: 'Oswald', sans-serif; letter-spacing: .3px;
-}
-.iq-method-note:empty { min-height: 0; margin-top: 0; }
-
-/* ── Info link ── */
-.iq-info-toggle { display: none; text-align: center; margin-top: 6px; }
+  /* ── Info toggle ── */
+.iq-info-toggle { display: none; text-align: center; margin-top: 8px; }
 .iq-info-toggle.visible { display: block; }
 .iq-info-link {
-  font-size: 14px; color: var(--gray-500); cursor: pointer;
-  text-decoration: none; border-bottom: 1px dashed var(--gray-400); transition: color .15s;
+  font-size: 14px; font-weight: 600; color: var(--teal); cursor: pointer;
+  text-decoration: none; font-family: 'Oswald', sans-serif;
+  text-transform: uppercase; letter-spacing: .4px; transition: color .15s;
 }
-.iq-info-link:hover { color: var(--teal); border-color: var(--teal); }
+.iq-info-link:hover { color: var(--teal-dark); }
 
-/* ── Info Modal Overlay ── */
-.iq-info-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,.5); z-index: 1000;
-  align-items: center; justify-content: center; padding: 20px;
+/* ── Inline comparison panel ── */
+.iq-compare-panel {
+  display: none; margin-top: 14px;
+  border: 2px solid var(--gray-200); border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--white);
 }
-.iq-info-overlay.open { display: flex; }
-.iq-info-modal {
-  background: var(--white); border-radius: var(--radius-lg);
-  max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25); position: relative;
-}
-.iq-info-close {
-  position: absolute; top: 12px; right: 16px;
-  background: none; border: none; font-size: 24px;
-  color: var(--gray-500); cursor: pointer; z-index: 2;
-  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-  border-radius: 50%; transition: all .15s;
-}
-.iq-info-close:hover { background: var(--gray-100); color: var(--gray-800); }
-.iq-info-modal-body {
+.iq-compare-panel.open {
   display: grid; grid-template-columns: 1fr 1fr;
 }
-.iq-info-side {
-  padding: 28px 24px;
-}
+.iq-info-side { padding: 22px 20px; }
 .iq-info-side:first-child { border-right: 1px solid var(--gray-200); }
 .iq-info-side h3 {
   font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700;
@@ -315,28 +42,25 @@
 }
 .iq-info-img {
   width: 100%; aspect-ratio: 4/3; border-radius: var(--radius);
-  object-fit: cover; margin-bottom: 16px;
-  background: var(--gray-100);
+  object-fit: cover; margin-bottom: 14px; background: var(--gray-100);
 }
 .iq-info-features {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
 }
-.iq-info-feat {
-  text-align: center; padding: 8px 4px;
-}
-.iq-info-feat-icon {
-  font-size: 20px; margin-bottom: 2px;
-}
+.iq-info-feat { text-align: center; padding: 6px 4px; }
+.iq-info-feat-icon { font-size: 18px; margin-bottom: 2px; }
 .iq-info-feat strong {
   display: block; font-size: 11px; font-weight: 700;
   color: var(--gray-800); text-transform: uppercase; letter-spacing: .3px;
 }
-.iq-info-feat span {
-  font-size: 10px; color: var(--gray-500);
-}
+.iq-info-feat span { font-size: 10px; color: var(--gray-500); }
 .iq-info-desc {
   font-size: 12px; color: var(--gray-600); line-height: 1.5;
-  border-top: 1px solid var(--gray-200); padding-top: 12px; margin-top: 4px;
+  border-top: 1px solid var(--gray-200); padding-top: 10px; margin-top: 4px;
+}
+@media (max-width: 600px) {
+  .iq-compare-panel.open { grid-template-columns: 1fr; }
+  .iq-info-side:first-child { border-right: none; border-bottom: 1px solid var(--gray-200); }
 }
 
 /* ── QUANTITY ── */
@@ -551,40 +275,35 @@
     </div>
     <div class="iq-method-note" id="iqMethodNote"></div>
     <div class="iq-info-toggle" id="iqInfoToggle">
-      <span class="iq-info-link" id="iqInfoLink">What&rsquo;s the difference?</span>
+      <span class="iq-info-link" id="iqInfoLink">&#9660; Compare Methods</span>
+    </div>
+    <div class="iq-compare-panel" id="iqComparePanel">
+      <div class="iq-info-side">
+        <h3>DTF Print</h3>
+        <div class="iq-info-sub">Vibrant. Durable. Detailed.</div>
+        <img class="iq-info-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%23212529'/%3E%3Crect x='120' y='60' width='160' height='100' rx='8' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ff6d00'/%3E%3Cstop offset='33%25' stop-color='%23ffc107'/%3E%3Cstop offset='66%25' stop-color='%234caf50'/%3E%3Cstop offset='100%25' stop-color='%232196f3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='200' y='120' text-anchor='middle' font-size='22' fill='white' font-weight='bold' font-family='sans-serif'%3ELOGO%3C/text%3E%3C/svg%3E" alt="DTF print example">
+        <div class="iq-info-features">
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#127912;</div><strong>Full Color</strong><span>Unlimited colors</span></div>
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129526;</div><strong>Soft Feel</strong><span>Lightweight</span></div>
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128737;</div><strong>Durable</strong><span>Long-lasting</span></div>
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#10024;</div><strong>Versatile</strong><span>Many fabrics</span></div>
+        </div>
+        <div class="iq-info-desc">Bright, detailed designs with a smooth finish. Best for photos, gradients, and complex artwork.</div>
+      </div>
+      <div class="iq-info-side">
+        <h3>Embroidery</h3>
+        <div class="iq-info-sub">Classic. Professional. Built to Last.</div>
+        <img class="iq-info-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%233d4a3e'/%3E%3Crect x='110' y='70' width='180' height='90' rx='8' fill='none' stroke='%23ccc' stroke-width='2'/%3E%3Ctext x='200' y='105' text-anchor='middle' font-size='18' fill='%23e0e0e0' font-weight='bold' font-family='sans-serif'%3ENORTH RIDGE%3C/text%3E%3Ctext x='200' y='125' text-anchor='middle' font-size='10' fill='%23bbb' font-family='sans-serif'%3EOUTFITTERS%3C/text%3E%3C/svg%3E" alt="Embroidery example">
+        <div class="iq-info-features">
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129525;</div><strong>Premium</strong><span>Professional</span></div>
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128170;</div><strong>Rugged</strong><span>Built to last</span></div>
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129527;</div><strong>Textured</strong><span>Dimension</span></div>
+          <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128085;</div><strong>Timeless</strong><span>Never dated</span></div>
+        </div>
+        <div class="iq-info-desc">High-quality stitching for a raised, textured finish. Best for logos and text on polos, caps, and jackets.</div>
+      </div>
     </div>
   </div>
-
-  <!-- INFO MODAL -->
-  <div class="iq-info-overlay" id="iqInfoOverlay">
-    <div class="iq-info-modal">
-      <button class="iq-info-close" id="iqInfoClose">&times;</button>
-      <div class="iq-info-modal-body">
-        <div class="iq-info-side">
-          <h3>Full-Color Print</h3>
-          <div class="iq-info-sub">Vibrant. Durable. Detailed.</div>
-          <img class="iq-info-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%23212529'/%3E%3Crect x='120' y='60' width='160' height='100' rx='8' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ff6d00'/%3E%3Cstop offset='33%25' stop-color='%23ffc107'/%3E%3Cstop offset='66%25' stop-color='%234caf50'/%3E%3Cstop offset='100%25' stop-color='%232196f3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='200' y='120' text-anchor='middle' font-size='22' fill='white' font-weight='bold' font-family='sans-serif'%3ELOGO%3C/text%3E%3Ctext x='200' y='220' text-anchor='middle' font-size='12' fill='%239e9e9e' font-family='sans-serif'%3EReplace with your hosted image%3C/text%3E%3C/svg%3E" alt="Full-color print example">
-          <div class="iq-info-features">
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#127912;</div><strong>Full Color</strong><span>Unlimited colors &amp; gradients</span></div>
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129526;</div><strong>Soft Feel</strong><span>Lightweight &amp; comfortable</span></div>
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128737;</div><strong>Durable</strong><span>Lasts the life of the garment</span></div>
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#10024;</div><strong>Versatile</strong><span>Works on many fabric types</span></div>
-          </div>
-          <div class="iq-info-desc">Full-color printing delivers bright, detailed designs with a smooth finish that moves with the fabric. Best for photos, gradients, fine lines, and complex artwork.</div>
-        </div>
-        <div class="iq-info-side">
-          <h3>Embroidery</h3>
-          <div class="iq-info-sub">Classic. Professional. Built to Last.</div>
-          <img class="iq-info-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%233d4a3e'/%3E%3Crect x='110' y='70' width='180' height='90' rx='8' fill='none' stroke='%23ccc' stroke-width='2'/%3E%3Ctext x='200' y='105' text-anchor='middle' font-size='18' fill='%23e0e0e0' font-weight='bold' font-family='sans-serif'%3ENORTH RIDGE%3C/text%3E%3Ctext x='200' y='125' text-anchor='middle' font-size='10' fill='%23bbb' font-family='sans-serif'%3EOUTFITTERS%3C/text%3E%3Ctext x='200' y='220' text-anchor='middle' font-size='12' fill='%239e9e9e' font-family='sans-serif'%3EReplace with your hosted image%3C/text%3E%3C/svg%3E" alt="Embroidery example">
-          <div class="iq-info-features">
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129525;</div><strong>Premium Look</strong><span>Professional &amp; elevated</span></div>
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128170;</div><strong>Built to Last</strong><span>Highly durable &amp; rugged</span></div>
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#129527;</div><strong>Texture &amp; Depth</strong><span>Adds dimension to your brand</span></div>
-            <div class="iq-info-feat"><div class="iq-info-feat-icon">&#128085;</div><strong>Timeless Style</strong><span>Classic look, never dated</span></div>
-          </div>
-          <div class="iq-info-desc">Embroidery uses high-quality stitching for a raised, textured finish that stands out. Best for logos, text, and simpler designs. Ideal for high-pile fabrics like fleece. Not suited for fine detail, gradients, or photos.</div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -673,7 +392,7 @@
 
   var $=function(s){return document.querySelector(s)}, $$=function(s){return Array.from(document.querySelectorAll(s))};
   var elCat=$('#iqCategory'),elMC=$('#iqMethodCard'),elBD=$('#iqBtnDtf'),elBE=$('#iqBtnEmb'),
-      elMN=$('#iqMethodNote'),elIT=$('#iqInfoToggle'),elIL=$('#iqInfoLink'),elIO=$('#iqInfoOverlay'),elIC=$('#iqInfoClose'),
+      elMN=$('#iqMethodNote'),elIT=$('#iqInfoToggle'),elIL=$('#iqInfoLink'),elCP=$('#iqComparePanel'),
       elLC=$('#iqLocCard'),elLL=$('#iqLocLabel'),elLO=$('#iqLocations'),elCL=$('#iqClearLocs'),elSS=$('#iqSleeveSub'),
       elQC=$('#iqQtyCard'),elSL=$('#iqSlider'),elQN=$('#iqQtyNumber'),elQI=$('#iqQtyInput'),
       elR=$('#iqResult'),elRL=$('#iqResultLabel'),elPE=$('#iqPriceEach'),elPT=$('#iqPriceTotal'),
@@ -686,9 +405,8 @@
 
   [elBD,elBE].forEach(function(b){b.addEventListener('click',function(){if(b.classList.contains('disabled'))return;[elBD,elBE].forEach(function(x){x.classList.remove('active')});b.classList.add('active');curM=b.dataset.method;updateLL();updateDN();recalc();});});
 
-  elIL.addEventListener('click',function(){elIO.classList.add('open');});
-  elIC.addEventListener('click',function(){elIO.classList.remove('open');});
-  elIO.addEventListener('click',function(e){if(e.target===elIO)elIO.classList.remove('open');});
+  var cmpOpen=false;
+  elIL.addEventListener('click',function(){cmpOpen=!cmpOpen;elCP.classList.toggle('open',cmpOpen);elIL.innerHTML=cmpOpen?'&#9650; Hide Comparison':'&#9660; Compare Methods';});
 
   elCL.addEventListener('click',function(){$$('#iqLocations input[type="checkbox"]').forEach(function(c){c.checked=false});elSS.classList.remove('visible');elCL.classList.remove('visible');recalc();});
 
